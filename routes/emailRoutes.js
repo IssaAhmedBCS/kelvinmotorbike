@@ -1,0 +1,58 @@
+const express = require('express');
+const router = express.Router();
+const nodemailer = require('nodemailer');
+
+// Email sending function
+const sendEmail = (req, res) => {
+  // Extract booking details from the request body
+  const { recipientEmail, fullName, scooterName, startDate, numberOfDays, totalPrice } = req.body;
+
+  // Set up the transporter with your email service and credentials
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'booking@kelvinmotorbike.co.tz', // Replace with your email
+      pass: 'kelvinmotorbike1', // Replace with your email password
+    },
+  });
+
+  // Define email options for the user with the updated message
+  let userMailOptions = {
+    from: 'booking@kelvinmotorbike.co.tz',
+    to: recipientEmail,
+    subject: 'Booking Confirmation',
+    text: `Dear ${fullName},\n\nThank you in advance for booking with our company. The price covers insurance, unlimited mileage, and government taxes.\n\nPlease send us your driving license so we can make a driving permit for you to drive in Zanzibar, which may cost $10 per driver.\n\nYour booking details:\n- Scooter Name: ${scooterName}\n- Start Date: ${startDate}\n- Number of Days: ${numberOfDays}\n- Total Price: $${totalPrice}\n\nBest regards,\nKelvinMotorBike`,
+  };
+
+  // Define email options for the fixed email address
+  let fixedMailOptions = {
+    from: 'booking@kelvinmotorbike.co.tz',
+    to: 'info@kelvinmotorbike.co.tz',
+    subject: 'New Booking Received',
+    text: `A new booking has been made.\n\nCustomer Name: ${fullName}\nScooter Name: ${scooterName}\nStart Date: ${startDate}\nNumber of Days: ${numberOfDays}\nTotal Price: $${totalPrice}`,
+  };
+
+  // Send the user's email
+  transporter.sendMail(userMailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending user email: ', error.message);
+      return res.status(500).send('Error sending user email: ' + error.message);
+    }
+    console.log('User email sent: ' + info.response);
+
+    // Send the fixed email
+    transporter.sendMail(fixedMailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending fixed email: ', error.message);
+        return res.status(500).send('Error sending fixed email: ' + error.message);
+      }
+      console.log('Fixed email sent: ' + info.response);
+      res.status(200).send('Emails sent successfully.');
+    });
+  });
+};
+
+// Define the route for sending emails
+router.post('/send-email', sendEmail);
+
+module.exports = router;
