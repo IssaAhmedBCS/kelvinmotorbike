@@ -6,7 +6,7 @@ app.use(cors());
 
 
 // Import routes
-const emailRoutes = require('./routes/emailRoutes');
+const emailRoutes = require('./api/emailRoutes');
 
 // Middleware
 app.use(bodyParser.json()); // Parse JSON bodies
