@@ -38,7 +38,7 @@ const sendEmail = (req, res) => {
 
 Thank you for booking with our company. The price covers insurance, unlimited mileage, and government taxes.
 
-Please send us your driving license so we can make a driving permit for you to drive in Zanzibar, which may cost $10 per driver.
+Please send us your passport number and  driving license so we can make a driving permit for you to drive in Zanzibar, which may cost $10 per driver.
 
 Your booking details:
 - Scooter Name: ${scooterName}
