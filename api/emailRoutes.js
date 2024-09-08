@@ -4,7 +4,19 @@ const nodemailer = require('nodemailer');
 
 const sendEmail = (req, res) => {
   // Extract booking details from the request body
-  const { recipientEmail, fullName, scooterName, startDate, endDate, pickupTime, dropoffTime, numberOfDays, totalPrice } = req.body;
+  const {
+    recipientEmail,
+    fullName,
+    scooterName,
+    startDate,
+    endDate,
+    pickupTime,
+    dropoffTime,
+    numberOfDays,
+    totalPrice,
+    pickupLocation,
+    dropoffLocation,
+  } = req.body;
 
   // Set up the transporter with your email service and credentials
   let transporter = nodemailer.createTransport({
@@ -22,7 +34,25 @@ const sendEmail = (req, res) => {
     from: 'booking@kelvinmotorbike.co.tz',
     to: recipientEmail,
     subject: 'Booking Confirmation',
-    text: `Dear ${fullName},\n\nThank you for booking with our company. The price covers insurance, unlimited mileage, and government taxes.\n\nPlease send us your driving license so we can make a driving permit for you to drive in Zanzibar, which may cost $10 per driver.\n\nYour booking details:\n- Scooter Name: ${scooterName}\n- Start Date: ${startDate}\n- End Date: ${endDate}\n- Pickup Time: ${pickupTime}\n- Dropoff Time: ${dropoffTime}\n- Number of Days: ${numberOfDays}\n- Total Price: $${totalPrice}\n\nBest regards,\nKelvinMotorBike`,
+    text: `Dear ${fullName},
+
+Thank you for booking with our company. The price covers insurance, unlimited mileage, and government taxes.
+
+Please send us your driving license so we can make a driving permit for you to drive in Zanzibar, which may cost $10 per driver.
+
+Your booking details:
+- Scooter Name: ${scooterName}
+- Start Date: ${startDate}
+- End Date: ${endDate}
+- Pickup Location: ${pickupLocation}
+- Dropoff Location: ${dropoffLocation}
+- Pickup Time: ${pickupTime}
+- Dropoff Time: ${dropoffTime}
+- Number of Days: ${numberOfDays}
+- Total Price: $${totalPrice}
+
+Best regards,
+KelvinMotorBike`,
   };
 
   // Define email options for the fixed email address
@@ -30,7 +60,18 @@ const sendEmail = (req, res) => {
     from: 'booking@kelvinmotorbike.co.tz',
     to: 'info@kelvinmotorbike.co.tz',
     subject: 'New Booking Received',
-    text: `A new booking has been made.\n\nCustomer Name: ${fullName}\nScooter Name: ${scooterName}\nStart Date: ${startDate}\nEnd Date: ${endDate}\nPickup Time: ${pickupTime}\nDropoff Time: ${dropoffTime}\nNumber of Days: ${numberOfDays}\nTotal Price: $${totalPrice}`,
+    text: `A new booking has been made.
+
+Customer Name: ${fullName}
+Scooter Name: ${scooterName}
+Start Date: ${startDate}
+End Date: ${endDate}
+Pickup Location: ${pickupLocation}
+Dropoff Location: ${dropoffLocation}
+Pickup Time: ${pickupTime}
+Dropoff Time: ${dropoffTime}
+Number of Days: ${numberOfDays}
+Total Price: $${totalPrice}`,
   };
 
   // Send the user's email
@@ -57,4 +98,5 @@ const sendEmail = (req, res) => {
 router.post('/send-email', sendEmail);
 
 module.exports = router;
+
 
